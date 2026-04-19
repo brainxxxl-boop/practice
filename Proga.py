@@ -1,39 +1,37 @@
+
 import random
 
-# Загадываем число один раз при запуске
-secret = random.randint(1, 100)
-
-print("--- ИГРА НАЧАЛАСЬ ---")
-print("Я загадал число от 1 до 100. У тебя 10 попыток.")
-
-popitka = 1
-while popitka <= 10:
-    try:
-        # Спрашиваем число у игрока
-        vvod = input(f"Попытка {popitka}/10. Введи число и нажми Enter: ")
-        
-        # Превращаем текст в число
-        nomer = int(vvod)
-        
-        # Сравниваем
-        if nomer < secret:
-            print("ОТВЕТ: Мало! Моё число БОЛЬШЕ.")
-        elif nomer > secret:
-            print("ОТВЕТ: Много! Моё число МЕНЬШЕ.")
-        else:
-            print(f"ПОБЕДА! Ты угадал за {popitka} попыток!")
-            break
+def start_game():
+    target = random.randint(1, 100)
+    print("--- ИГРА: УГАДАЙ ЧИСЛО (1-100) ---")
+    print("У тебя есть 10 попыток.")
+    
+    attempts = 0
+    while attempts < 10:
+        attempts += 1
+        try:
+            # Запрашиваем число
+            guess = int(input(f"Попытка {attempts}/10. Введи число: "))
             
-        # Даем подсказку на 5-й попытке
-        if popitka == 5:
-            print(f"Подсказка: число где-то между {secret-5} и {secret+5}")
-            
-        popitka += 1
-        
-    except ValueError:
-        print("ОШИБКА: Нужно вводить только цифры!")
+            # Самая важная часть: сравнение
+            if guess < target:
+                print("МАЛО! Загаданное число БОЛЬШЕ.")
+            elif guess > target:
+                print("МНОГО! Загаданное число МЕНЬШЕ.")
+            else:
+                print(f"КРАСАВА! Угадал за {attempts} попыток!")
+                return # Выходим из функции, так как победили
 
-if popitka > 10:
-    print(f"ПОПЫТКИ КОНЧИЛИСЬ. Было загадано: {secret}")
+            # Подсказка на 5-й попытке (как в задании)
+            if attempts == 5:
+                print(f"--- ПОДСКАЗКА: Число где-то рядом с {target + random.randint(-5, 5)} ---")
 
-input("Нажми Enter, чтобы закрыть окно...")
+        except ValueError:
+            print("Ошибка! Нужно вводить именно ЦИФРЫ.")
+            attempts -= 1 # Не считаем попытку, если ввели ерунду
+
+    print(f"Попытки кончились! Я загадал число {target}.")
+
+if __name__ == "__main__":
+    start_game()
+    input("\nНажми Enter, чтобы выйти...")
